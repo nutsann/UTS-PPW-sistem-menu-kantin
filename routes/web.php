@@ -185,24 +185,36 @@ Route::put('/menu/{id}', function (Request $request, $id) {
     $input['nama_menu'] = trim(strip_tags($input['nama_menu'] ?? ''));
     $input['barcode'] = trim(strip_tags($input['barcode'] ?? ''));
 
-    $validator = Validator::make($input, [
-        'kode_menu' => [
-            'required',
-            'alpha_num',
-            'size:10',
-            Rule::unique('menu', 'kode_menu')->ignore($id),
-        ],
-        'nama_menu' => 'required|string|min:3|max:100',
-        'barcode' => [
-            'required',
-            'string',
-            'min:5',
-            'max:30',
-            Rule::unique('menu', 'barcode')->ignore($id),
-        ],
-        'harga' => 'required|integer|min:1000|max:100000',
-        'kategori_menu_id' => 'required|integer|exists:kategori_menu,id',
-    ]);
+    
+$validator = Validator::make($input, [
+    'kode_menu' => [
+        'required',
+        'alpha_num',
+        'size:10',
+        Rule::unique('menu', 'kode_menu')->ignore($id),
+    ],
+    'nama_menu' => 'required|string|min:3|max:100',
+    'barcode' => [
+        'required',
+        'string',
+        'min:5',
+        'max:30',
+        Rule::unique('menu', 'barcode')->ignore($id),
+    ],
+    'harga' => 'required|integer|min:1000|max:100000',
+    'kategori_menu_id' => 'required|integer|exists:kategori_menu,id',
+], [
+    'kode_menu.required' => 'Kode menu wajib diisi.',
+    'kode_menu.alpha_num' => 'Kode menu hanya boleh berisi huruf dan angka.',
+    'kode_menu.size' => 'Kode menu harus tepat 10 karakter.',
+    'nama_menu.min' => 'Nama menu minimal 3 karakter.',
+    'barcode.min' => 'Barcode minimal 5 karakter.',
+    'barcode.max' => 'Barcode maksimal 30 karakter.',
+    'harga.min' => 'Harga minimal Rp1.000.',
+    'harga.max' => 'Harga maksimal Rp100.000.',
+    'kategori_menu_id.exists' => 'Kategori yang dipilih tidak tersedia.',
+]);
+
 
     if ($validator->fails()) {
         return redirect("/menu/{$id}/edit")
