@@ -1,3 +1,7 @@
+-- Database Sistem Menu Kantin
+-- Paket E - Praktikum Pemrograman Web
+-- Relasi: kategori_menu (1) ke menu (N)
+-- Import file ini pada database baru.
 
 CREATE DATABASE IF NOT EXISTS menu_kantin_2401020144;
 
